@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ali Haschimi - Visitenkarte</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      height: 100vh;
+      overflow: hidden;
+      font-family: 'Verdana', sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    /* 🎥 Hintergrundvideo */
+    video.bg-video {
+      position: absolute;
+      top: 0;
+      left: 0;
+      object-fit: cover;
+      width: 100%;
+      height: 100%;
+      z-index: -2;
+      filter: brightness(0.3);
+    }
+
+    .card-container {
+      perspective: 1500px;
+    }
+
+    .card {
+      width: 320px;
+      height: 450px;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 1s;
+      cursor: pointer;
+    }
+
+    .card.flipped {
+      transform: rotateY(180deg);
+    }
+
+    .card-side {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+      transition: box-shadow 0.5s ease;
+    }
+
+    .card-side:hover {
+      box-shadow: 0 0 30px #96be25, 0 0 60px #96be25;
+    }
+
+    .card-front {
+      background-color: #ffffffd9;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      border: 2px solid #96be25;
+    }
+
+    /* 💡 Glow-Name */
+    .name {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #96be25;
+      text-shadow: 0 0 10px #96be25, 0 0 20px #b3d43a;
+      margin-bottom: 1rem;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { text-shadow: 0 0 10px #96be25; }
+      50% { text-shadow: 0 0 20px #b3d43a, 0 0 40px #c7ff45; }
+    }
+
+    .card-front p {
+      margin: 0.5rem 0;
+      color: #333;
+      text-align: center;
+    }
+
+    .socials a {
+      margin: 0 6px;
+      color: #1e90ff;
+      font-weight: bold;
+      position: relative;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+
+    .socials a::after {
+      content: '';
+      position: absolute;
+      bottom: -3px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: #96be25;
+      transition: 0.4s ease;
+    }
+
+    .socials a:hover::after {
+      width: 100%;
+    }
+
+    .qr {
+      margin-top: 1rem;
+    }
+
+    .qr img {
+      width: 80px;
+      border-radius: 10px;
+      border: 2px solid #96be25;
+    }
+
+    .card-back {
+      background: #96be25;
+      transform: rotateY(180deg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .card-back img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;        
+      object-position: center top; 
+      border-radius: 0;          
+      transition: transform 0.4s ease-in-out, filter 0.4s ease-in-out;
+    }
+
+    .card-back img:hover {
+      transform: scale(1.05);
+      filter: brightness(1.1);
+    }
+
+    @media (max-width: 400px) {
+      .card {
+        width: 90vw;
+        height: 60vh;
+      }
+      .name {
+        font-size: 2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- 🎥 Hintergrundvideo -->
+  <video class="bg-video" autoplay loop muted>
+    <source src="final.mp4" type="video/mp4" />
+  </video>
+
+  <div class="card-container" onclick="flipCard()">
+    <div class="card" id="card">
+      <!-- Vorderseite -->
+      <div class="card-side card-front">
+        <div class="name">Ali Haschimi</div>
+        <p>Webdeveloper | PE | AI-Artist</p>
+        <p>📧 haschimi7219@gmail.com<br>📱 +49 176 2258 9866</p>
+        <div class="socials">
+          <a href="https://www.linkedin.com/in/ali-haschimi-67b231278/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+          <a href="https://github.com/Aliweb23" target="_blank" rel="noopener noreferrer">GitHub</a>
+          <a href="https://www.youtube.com/@ali.haschimi2024/shorts" target="_blank" rel="noopener noreferrer">YouTube</a>
+          <a href="https://www.instagram.com/a.haschimi91/" target="_blank" rel="noopener noreferrer">Instagram</a>
+        </div>
+        <div class="qr">
+          <a href="https://aliweb23.github.io/haschimi.de/" target="_blank">
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=https://aliweb23.github.io/haschimi.de/" alt="QR Code zum Portfolio">
+          </a>
+        </div>
+      </div>
+
+      <!-- Rückseite -->
+      <div class="card-side card-back">
+        <img src="Mallorca.jpg" alt="Ali Haschimi" />
+      </div>
+    </div>
+  </div>
+
+  <!-- 🔊 Flip-Sound -->
+  <audio id="flipSound" src="mouse-click.mp3"></audio>
+g
+  <script>
+    function flipCard() {
+      const card = document.getElementById('card');
+      const sound = document.getElementById('flipSound');
+      card.classList.toggle('flipped');
+      sound.play();
+    }
+  </script>
+</body>
+</html>
